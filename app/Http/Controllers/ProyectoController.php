@@ -36,7 +36,7 @@ class ProyectoController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $image = file_get_contents($request->file('thumbnail')->getRealPath());
-            $data['thumbnail'] = $image; // Guarda el contenido binario
+            $data['thumbnail'] = $image;
         }
 
         if ($request->hasFile('route_pdf')) {
