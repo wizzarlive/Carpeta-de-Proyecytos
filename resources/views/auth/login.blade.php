@@ -20,14 +20,6 @@
 
 <body class="bg-gray-900 font-sans">
     <div id="app">
-        <!-- Botón Volver -->
-        <div class="absolute top-4 left-4">
-            <a href="{{ url('/') }}"
-                class="inline-flex items-center px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg shadow hover:bg-gray-700 transition duration-200">
-                ⬅ Volver al inicio
-            </a>
-        </div>
-
         <main class="min-h-screen flex items-center justify-center">
             <div class="w-full max-w-lg bg-gray-800 rounded-2xl shadow-2xl p-10 border border-gray-700">
                 <!-- Logo / Nombre -->
