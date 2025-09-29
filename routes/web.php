@@ -14,3 +14,8 @@ Route::get('/create_etiqueta', function () {
     return view('create_etiqueta');
 });
 
+Route::get('/create_proyecto', function () {
+    return view('create_proyectos');
+});
+
+
