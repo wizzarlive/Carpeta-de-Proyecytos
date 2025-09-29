@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProyectoController extends Controller
 {
@@ -31,7 +32,18 @@ class ProyectoController extends Controller
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
-        Proyecto::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('thumbnail')) {
+            $image = file_get_contents($request->file('thumbnail')->getRealPath());
+            $data['thumbnail'] = $image; // Guarda el contenido binario
+        }
+
+        if ($request->hasFile('route_pdf')) {
+            $data['route_pdf'] = $request->file('route_pdf')->store('pdfs', 'public');
+        }
+
+        Proyecto::create($data);
 
         return redirect()->route('')->with('success', 'Proyecto creado exitosamente.');
     }
@@ -52,7 +64,20 @@ class ProyectoController extends Controller
             'route_pdf' => 'nullable|url',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
-        $proyect->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('thumbnail')) {
+            $image = file_get_contents($request->file('thumbnail')->getRealPath());
+            $data['thumbnail'] = $image;
+        }
+
+        if ($request->hasFile('route_pdf')) {
+            if ($proyect->route_pdf) {
+                Storage::disk('public')->delete($proyect->route_pdf);
+            }
+            $data['route_pdf'] = $request->file('route_pdf')->store('pdfs', 'public');
+        }
+        $proyect->update($data);    
         return redirect()->route('')->with('success','Proyecto actualizado correctamente');
     }
 
