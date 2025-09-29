@@ -7,6 +7,11 @@
   @vite(['resources/css/create_proyectos.css', 'resources/js/app.js'])
 </head>
 <body>
+  @if(session('success'))
+      <div class="alert alert-success">
+          {{ session('success') }}
+      </div>
+  @endif
   <div class="container">
 
     <!-- Botón volver -->
@@ -16,7 +21,8 @@
 
     <!-- Formulario -->
     <div class="form-card">
-      <form action="#" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('proyectos.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
 
         <div class="form-group">
           <label for="title">Título</label>
@@ -50,7 +56,12 @@
 
         <div class="form-group">
           <label for="category_id">Categoría</label>
-          <input type="number" id="category_id" name="category_id" placeholder="ID de la categoría">
+          <select id="category_id" name="category_id">
+              <option value="">Todas las categorías</option>
+              @foreach ( $categorys as $category )
+                  <option value="actividad">{{ $category->name }}</option>
+              @endforeach
+          </select> 
         </div>
 
         <button type="submit" class="btn btn-primary">Guardar Proyecto</button>

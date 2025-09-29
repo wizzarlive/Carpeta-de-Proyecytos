@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProyectoController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -18,16 +20,16 @@ Route::get('login/github/callback', [App\Http\Controllers\Auth\LoginController::
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/proyectos', function () {
-    return view('proyectos');
-});
 
-Route::get('/create_etiqueta', function () {
-    return view('create_etiqueta');
-});
+Route::get('/proyectos', [ProyectoController::class, 'index'])->name('name');
+Route::post('/proyectos', [ProyectoController::class, 'store'])->name('proyectos.store');
 
-Route::get('/create_proyecto', function () {
-    return view('create_proyectos');
-});
+
+Route::get('/create_etiqueta', [CategoriaController::class,'index'])->name('categorias.index');
+Route::post('/create_etiqueta', [CategoriaController::class, 'store'])->name('categorias.store');
+
+
+
+Route::get('/create_proyecto', [ProyectoController::class,'indexcreate'])->name('');
 
 

@@ -51,7 +51,7 @@
     color: #9CA3AF;
   }
   
-  input, textarea {
+  input, textarea, select {
     width: 100%;
     padding: 10px 15px;
     background-color: #1F2937;

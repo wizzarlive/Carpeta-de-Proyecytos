@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,8 +15,15 @@ class ProyectoController extends Controller
     public function index()
     {
         $proyects = Proyecto::all();
-        return view("/", compact("proyects"));
+        $categorys = Categoria::all();
+        return view("/proyectos", compact("proyects", 'categorys'));
     }
+    public function indexcreate()
+    {
+        $categorys = Categoria::all();
+        return view("/create_proyectos", compact( 'categorys'));
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,7 +53,7 @@ class ProyectoController extends Controller
 
         Proyecto::create($data);
 
-        return redirect()->route('')->with('success', 'Proyecto creado exitosamente.');
+        return redirect()->route('/create_proyectos')->with('success', 'Proyecto creado exitosamente.');
     }
 
 
@@ -78,7 +86,7 @@ class ProyectoController extends Controller
             $data['route_pdf'] = $request->file('route_pdf')->store('pdfs', 'public');
         }
         $proyect->update($data);    
-        return redirect()->route('')->with('success','Proyecto actualizado correctamente');
+        return redirect()->route('/create_proyectos')->with('success','Proyecto actualizado correctamente');
     }
 
     /**
@@ -88,6 +96,6 @@ class ProyectoController extends Controller
     {
         $proyet = Proyecto::find($id);
         $proyet->delete();
-        return redirect()->route('')->with('success','Proyecto borrado correctamente');
+        return redirect()->route('/create_proyectos')->with('success','Proyecto borrado correctamente');
     }
 }

@@ -16,9 +16,10 @@
     <!-- Formulario -->
     <div class="form-section">
       <h2 class="section-title">Agregar Categoría</h2>
-      <form>
+      <form action="{{ route('categorias.store') }}" method="POST">
+        @csrf
         <div class="form-group">
-          <input type="text" placeholder="Nombre de la categoría..." required>
+          <input type="text" placeholder="Nombre de la categoría..." required name="name">
         </div>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-plus"></i> Guardar
