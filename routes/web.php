@@ -1,10 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
 
 Route::get(
     'login/google',
@@ -16,6 +20,5 @@ Route::get(
     [\App\Http\Controllers\Auth\LoginController::class, 'handleGoogleCallback']
 );
 
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
