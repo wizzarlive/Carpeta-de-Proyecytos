@@ -93,41 +93,9 @@ class LoginController extends Controller
 
             Auth::login($user, true);
 
-            return redirect('/home');
+            return redirect('/proyectos');
         } catch (\Exception $e) {
             return redirect('/login')->withErrors(['github_error' => 'Error iniciando sesión con GitHub']);
-        }
-    }
-
-
-
-
-
-    public function redirectToFacebook()
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    public function handleFacebookCallback()
-    {
-        try {
-            $facebookUser = Socialite::driver('facebook')->user();
-
-            $user = User::updateOrCreate(
-                ['email' => $facebookUser->getEmail()],
-                [
-                    'name'      => $facebookUser->getName(),
-                    'password'  => bcrypt(Str::random(16)),
-                    'facebook_id' => $facebookUser->getId(),     // agrega columna si la quieres usar
-                    'avatar'    => $facebookUser->getAvatar(),  // guarda foto de perfil
-                ]
-            );
-
-            Auth::login($user, true);
-
-            return redirect('/home');
-        } catch (\Exception $e) {
-            return redirect('/login')->withErrors(['facebook_error' => 'Error iniciando sesión con Facebook']);
         }
     }
 }
