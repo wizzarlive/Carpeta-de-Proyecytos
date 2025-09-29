@@ -7,7 +7,12 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('auth.login');
+    if (Auth::check()) return redirect('/proyectos');
+
+    return response(view('auth.login'))
+        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
 });
 
 Auth::routes();
@@ -33,3 +38,18 @@ Route::post('/create_etiqueta', [CategoriaController::class, 'store'])->name('ca
 Route::get('/create_proyecto', [ProyectoController::class,'indexcreate'])->name('');
 
 
+
+// Página de proyectos (protegida)
+Route::middleware(['auth'])->get('/proyectos', function () {
+    return view('proyectos');
+});
+
+// Crear etiqueta (protegida)
+Route::middleware(['auth'])->get('/create_etiqueta', function () {
+    return view('create_etiqueta');
+});
+
+// Crear proyecto (protegida)
+Route::middleware(['auth'])->get('/create_proyecto', function () {
+    return view('create_proyectos');
+});
