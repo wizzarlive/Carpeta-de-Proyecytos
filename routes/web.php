@@ -10,3 +10,7 @@ Route::get('/proyectos', function () {
     return view('proyectos');
 });
 
+Route::get('/create_etiqueta', function () {
+    return view('create_etiqueta');
+});
+
