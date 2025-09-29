@@ -1,58 +1,39 @@
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
 import './bootstrap';
+import { createApp } from 'vue';
 
-// Función para filtrar proyectos
-function filterProjects() {
-    const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-    const selectedCategory = document.getElementById('category-select')?.value || '';
-    const projects = document.querySelectorAll('.project-card');
+/**
+ * Next, we will create a fresh Vue application instance. You may then begin
+ * registering components with the application instance so they are ready
+ * to use in your application's views. An example is included for you.
+ */
 
-    projects.forEach(project => {
-        const title = project.getAttribute('data-title').toLowerCase();
-        const description = project.querySelector('.project-description').textContent.toLowerCase();
-        const category = project.getAttribute('data-category');
+const app = createApp({});
 
-        const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-        const matchesCategory = !selectedCategory || category === selectedCategory;
+import ExampleComponent from './components/ExampleComponent.vue';
+app.component('example-component', ExampleComponent);
 
-        if (matchesSearch && matchesCategory) {
-            project.style.display = 'block';
-        } else {
-            project.style.display = 'none';
-        }
-    });
-}
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
 
+// Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
+//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
+// });
 
+/**
+ * Finally, we will attach the application instance to a HTML element with
+ * an "id" attribute of "app". This element is included with the "auth"
+ * scaffolding. Otherwise, you will need to add an element yourself.
+ */
 
-// Botones de descarga
-const downloadButtons = document.querySelectorAll('.download-btn');
-downloadButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        const projectTitle = this.closest('.project-card').getAttribute('data-title');
-        alert(`Descargando documentación del proyecto: ${projectTitle}`);
-        // Aquí iría la lógica para descargar el PDF
-    });
-});
-
-
-
-
-
-// Inicialización cuando el DOM esté cargado
-document.addEventListener('DOMContentLoaded', function () {
-    // Asignar eventos a los botones de acción
-    assignActionEvents();
-
-    // Evento para el buscador
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', filterProjects);
-    }
-
-    // Evento para el selector de categoría
-    const categorySelect = document.getElementById('category-select');
-    if (categorySelect) {
-        categorySelect.addEventListener('change', filterProjects);
-    }
-
-});
+app.mount('#app');
