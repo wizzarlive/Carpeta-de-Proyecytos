@@ -39,7 +39,7 @@ Route::get('/create_proyecto', [ProyectoController::class,'indexcreate'])->name(
 
 
 
-// Página de proyectos (protegida)
+// Página de proyectos (protegida) s
 Route::middleware(['auth'])->get('/proyectos', function () {
     return view('proyectos');
 });
