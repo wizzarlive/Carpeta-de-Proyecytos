@@ -24,10 +24,10 @@
             <div class="filter-row">
                 <div class="filter-item">
                     <select id="category-select">
-                        <option value="">Todas las categorías</option>
-                        @foreach ( $categorys as $category )
-                            <option value="actividad">{{ $category->name }}</option>
-                        @endforeach
+                    <option value="">Todas</option>
+                    @foreach ( $categorys as $category )
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                    @endforeach
                     </select>
                 </div>
                 <div class="filter-item">
@@ -50,36 +50,52 @@
 
         <div class="projects-grid" id="projects-grid">
             <!-- Proyecto 1 con imagen real -->
-            @foreach ( $proyects as $proyect )
-                <div class="project-card" data-category="practica" data-title="Sistema de Gestión">
+            @foreach ($proyects as $proyect)
+                <div class="project-card" 
+                    data-category="{{ $proyect->categoria->name ?? '' }}" 
+                    data-title="{{ $proyect->title }}">
+                    
                     <div class="card-header">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Sistema de Gestión" class="card-image">
+                        <img src="data:image/png;base64,{{ $proyect->thumbnail }}" 
+                            alt="{{ $proyect->title }}" 
+                            class="card-image">
                         <div class="card-actions">
-                            <div class="action-btn edit-btn">
+                            <a href="{{ route('edit_proyectos', $proyect->id) }}" class="action-btn edit-btn">
                                 <i class="fas fa-edit"></i>
-                            </div>
+                            </a>
                             <div class="action-btn delete-btn">
-                                <i class="fas fa-trash"></i>
+                                <form action="{{ route('proyectos.destroy', $proyect->id) }}" method="POST" onsubmit="return confirm('¿Seguro de eliminar este proyecto?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background:none;border:none;cursor:pointer;color:white;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
+
                     <div class="card-body">
-                        <h3 class="project-title">Sistema de Gestión</h3>
-                        <p class="project-description">Sistema completo para la gestión de recursos empresariales con panel administrativo y dashboard interactivo.</p>
+                        <h3 class="project-title">{{ $proyect->title }}</h3>
+                        <p class="project-description">{{ $proyect->description }}</p>
                         <div class="project-meta">
-                            <span><i class="fas fa-tag"></i> Práctica</span>
+                            <span><i class="fas fa-tag"></i> {{ $proyect->categoria->name ?? 'Sin categoría' }}</span>
                         </div>
                     </div>
+
                     <div class="card-footer">
-                        <button class="footer-btn download-btn">
-                            <i class="fas fa-download"></i> Descargar
+                        <button 
+                            class="footer-btn download-btn"
+                            data-url="{{ asset('storage/' . $proyect->route_pdf) }}"
+                            data-filename="{{ Str::slug($proyect->title) }}.pdf">
+                            <i class="fas fa-download"></i> PDF
                         </button>
-                        <button class="footer-btn github-btn">
+                        <a href="{{ $proyect->route_github ?? '#' }}" target="_blank" class="footer-btn github-btn">
                             <i class="fab fa-github"></i> GitHub
-                        </button>
-                        <button class="footer-btn view-btn">
+                        </a>
+                        <a href="{{ $proyect->route_proyect ?? '#' }}" target="_blank" class="footer-btn view-btn">
                             <i class="fas fa-external-link-alt"></i> Visualizar
-                        </button>
+                        </a>
                     </div>
                 </div>
             @endforeach

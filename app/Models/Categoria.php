@@ -9,7 +9,8 @@ class Categoria extends Model
     //
     protected $table = "categorias";
     protected $fillable = [
-        "name"
+        "name",
+        "category_id"
     ];
 
     public function proyectos() {

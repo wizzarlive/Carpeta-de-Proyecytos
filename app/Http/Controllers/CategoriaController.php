@@ -13,7 +13,7 @@ class CategoriaController extends Controller
     public function index()
     {
         $categories = Categoria::all();
-        return view("/create_etiqueta", compact("categories"));
+        return view("create_etiqueta", compact("categories"));
     }
 
 
@@ -40,7 +40,7 @@ class CategoriaController extends Controller
             'name' => 'required|string|max:255',
         ]);
         Categoria::findOrFail($id)->update($request->all());
-        return redirect()->route('/create_etiqueta')->with('success','Categoria actualizada');
+        return redirect()->route('categorias.index')->with('success','Categoria actualizada');
     }
 
     /**
@@ -49,6 +49,6 @@ class CategoriaController extends Controller
     public function destroy(string $id)
     {
         Categoria::findOrFail($id)->delete();
-        return redirect()->route('/create_etiqueta')->with('success','Eliminado correctamente');
+        return redirect()->route('categorias.index')->with('success','Eliminado correctamente');
     }
 }

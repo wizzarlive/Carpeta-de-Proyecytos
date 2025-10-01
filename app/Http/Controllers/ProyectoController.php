@@ -16,12 +16,18 @@ class ProyectoController extends Controller
     {
         $proyects = Proyecto::all();
         $categorys = Categoria::all();
-        return view("/proyectos", compact("proyects", 'categorys'));
+        return view("proyectos", compact("proyects", 'categorys'));
     }
     public function indexcreate()
     {
         $categorys = Categoria::all();
-        return view("/create_proyectos", compact( 'categorys'));
+        return view("create_proyectos", compact( 'categorys'));
+    }
+    public function indexedit(string $id)
+    {
+        $proyect = Proyecto::findOrFail($id);
+        $categories = Categoria::all();
+        return view('edit_proyectos', compact('proyect', 'categories'));
     }
 
 
@@ -33,17 +39,23 @@ class ProyectoController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'route_proyect' => 'nullable|url',
             'route_github' => 'nullable|url',
-            'route_pdf' => 'nullable|url',
-            'categoria_id' => 'required|exists:categorias,id',
+            'route_pdf' => 'nullable|file|mimes:pdf|max:5120',
+            'category_id' => 'required|exists:categorias,id',
         ]);
-
-        $data = $request->all();
+        $data = $request->only([
+            'title',
+            'description',
+            'route_proyect',
+            'route_github',
+            'category_id',
+        ]);
+        
 
         if ($request->hasFile('thumbnail')) {
-            $image = file_get_contents($request->file('thumbnail')->getRealPath());
+            $image = base64_encode(file_get_contents($request->file('thumbnail')->getRealPath()));
             $data['thumbnail'] = $image;
         }
 
@@ -53,7 +65,7 @@ class ProyectoController extends Controller
 
         Proyecto::create($data);
 
-        return redirect()->route('/create_proyectos')->with('success', 'Proyecto creado exitosamente.');
+        return redirect()->route('create_proyectos')->with('success', 'Proyecto creado exitosamente.');
     }
 
 
@@ -63,19 +75,27 @@ class ProyectoController extends Controller
     public function update(Request $request, string $id)
     {
         $proyect = Proyecto::findOrFail($id);
+
         $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|string|max:255',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'route_proyect' => 'nullable|url',
             'route_github' => 'nullable|url',
-            'route_pdf' => 'nullable|url',
-            'categoria_id' => 'required|exists:categorias,id',
+            'route_pdf' => 'nullable|file|mimes:pdf|max:5120',
+            'category_id' => 'required|exists:categorias,id',
         ]);
-        $data = $request->all();
+
+        $data = $request->only([
+            'title',
+            'description',
+            'route_proyect',
+            'route_github',
+            'category_id',
+        ]);
 
         if ($request->hasFile('thumbnail')) {
-            $image = file_get_contents($request->file('thumbnail')->getRealPath());
+            $image = base64_encode(file_get_contents($request->file('thumbnail')->getRealPath()));
             $data['thumbnail'] = $image;
         }
 
@@ -85,8 +105,10 @@ class ProyectoController extends Controller
             }
             $data['route_pdf'] = $request->file('route_pdf')->store('pdfs', 'public');
         }
-        $proyect->update($data);    
-        return redirect()->route('/create_proyectos')->with('success','Proyecto actualizado correctamente');
+
+        $proyect->update($data);
+
+        return redirect()->route('create_proyectos')->with('success', 'Proyecto actualizado correctamente');
     }
 
     /**
@@ -96,6 +118,6 @@ class ProyectoController extends Controller
     {
         $proyet = Proyecto::find($id);
         $proyet->delete();
-        return redirect()->route('/create_proyectos')->with('success','Proyecto borrado correctamente');
+        return redirect()->route('proyectos')->with('success','Proyecto borrado correctamente');
     }
 }

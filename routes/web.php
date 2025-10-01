@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 
+/* 
+RUTA PRINCIPAL
+*/
 Route::get('/', function () {
     if (Auth::check()) return redirect('/proyectos');
 
@@ -15,41 +18,42 @@ Route::get('/', function () {
         ->header('Expires', '0');
 });
 
+/* 
+RUTA LOGIN Y REGISTER
+*/
 Auth::routes();
 
+/* 
+RUTA LOGIN CON GOOGLE
+*/
 Route::get('login/google', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToGoogle']);
 Route::get('login/google/callback', [\App\Http\Controllers\Auth\LoginController::class, 'handleGoogleCallback']);
 
+/* 
+RUTA LOGIN CON GITHUB
+*/
 Route::get('login/github', [App\Http\Controllers\Auth\LoginController::class, 'redirectToGithub']);
 Route::get('login/github/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleGithubCallback']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*
+RUTAS PROTEGIDAS
+*/
+// Página de proyectos (protegida)
+Route::middleware(['auth'])->get('/proyectos', [ProyectoController::class, 'index'])->name('proyectos');
+Route::middleware(['auth'])->delete('/proyectos/{id}', [ProyectoController::class, 'destroy'])->name('proyectos.destroy');
 
 
-Route::get('/proyectos', [ProyectoController::class, 'index'])->name('name');
-Route::post('/proyectos', [ProyectoController::class, 'store'])->name('proyectos.store');
+// Página de CRUD categorias "etiquetas" (protegida)
+Route::middleware(['auth'])->get('/create_etiqueta', [CategoriaController::class,'index'])->name('categorias.index');
+Route::middleware(['auth'])->post('/create_etiqueta', [CategoriaController::class,'store'])->name('categorias.store');
 
 
-Route::get('/create_etiqueta', [CategoriaController::class,'index'])->name('categorias.index');
-Route::post('/create_etiqueta', [CategoriaController::class, 'store'])->name('categorias.store');
+// Página de formulario de agregar proyectos (protegida)
+Route::middleware(['auth'])->get('/create_proyecto', [ProyectoController::class,'indexcreate'])->name('create_proyectos');
+Route::middleware(['auth'])->post('/create_proyecto', [ProyectoController::class, 'store'])->name('create_proyectos.store');
 
 
-
-Route::get('/create_proyecto', [ProyectoController::class,'indexcreate'])->name('');
-
-
-
-// Página de proyectos (protegida) s
-Route::middleware(['auth'])->get('/proyectos', function () {
-    return view('proyectos');
-});
-
-// Crear etiqueta (protegida)
-Route::middleware(['auth'])->get('/create_etiqueta', function () {
-    return view('create_etiqueta');
-});
-
-// Crear proyecto (protegida)
-Route::middleware(['auth'])->get('/create_proyecto', function () {
-    return view('create_proyectos');
-});
+// Página para editar proyectos
+Route::middleware(['auth'])->get('/edit_proyectos/{id}', [ProyectoController::class, 'indexedit'])->name('edit_proyectos');
+Route::middleware(['auth'])->put('/proyectos/{id}', [ProyectoController::class, 'update'])->name('proyectos.update');

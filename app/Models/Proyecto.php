@@ -13,10 +13,11 @@ class Proyecto extends Model
         "thumbnail",
         "route_proyect",
         "route_github",
-        "route_pdf"
+        "route_pdf",
+        "category_id"
     ];
 
     public function categoria() {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Categoria::class, 'category_id');
     }
 }

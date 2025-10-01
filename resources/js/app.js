@@ -5,35 +5,66 @@
  */
 
 import './bootstrap';
-import { createApp } from 'vue';
+// Función para filtrar proyectos
+function filterProjects() {
+    const searchTerm = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+    const selectedCategory = document.getElementById('category-select')?.value || '';
+    const projects = document.querySelectorAll('.project-card');
 
-/**
- * Next, we will create a fresh Vue application instance. You may then begin
- * registering components with the application instance so they are ready
- * to use in your application's views. An example is included for you.
- */
+    projects.forEach(project => {
+        const title = (project.getAttribute('data-title') || '').toLowerCase();
+        const description = (project.querySelector('.project-description')?.textContent || '').toLowerCase();
+        const category = project.getAttribute('data-category') || '';
 
-const app = createApp({});
+        // si searchTerm está vacío => todos los proyectos cumplen
+        const matchesSearch = !searchTerm || title.includes(searchTerm);
+        // si selectedCategory está vacío => todas las categorías cumplen
+        const matchesCategory = !selectedCategory || category === selectedCategory;
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+        if (matchesSearch && matchesCategory) {
+            project.style.display = ''; // respeta su display original (flex/grid/etc)
+        } else {
+            project.style.display = 'none';
+        }
+    });
+}
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+const downloadButtons = document.querySelectorAll('.download-btn');
 
-// Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
-//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
-// });
+downloadButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        const url = this.getAttribute("data-url");
+        const filename = this.getAttribute("data-filename");
 
-/**
- * Finally, we will attach the application instance to a HTML element with
- * an "id" attribute of "app". This element is included with the "auth"
- * scaffolding. Otherwise, you will need to add an element yourself.
- */
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error al descargar el archivo");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("No se pudo descargar el archivo.");
+            });
+    });
+});
 
-app.mount('#app');
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Asignar eventos a los botones de acción
+    // assignActionEvents();
+
+    // Evento para el buscador
+    document.getElementById('search-input')?.addEventListener('input', filterProjects);
+    document.getElementById('category-select')?.addEventListener('change', filterProjects);
+
+});

@@ -21,7 +21,7 @@
 
     <!-- Formulario -->
     <div class="form-card">
-      <form action="{{ route('proyectos.store') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('create_proyectos.store') }}" method="POST" enctype="multipart/form-data">
       @csrf
 
         <div class="form-group">
@@ -57,9 +57,8 @@
         <div class="form-group">
           <label for="category_id">Categoría</label>
           <select id="category_id" name="category_id">
-              <option value="">Todas las categorías</option>
               @foreach ( $categorys as $category )
-                  <option value="actividad">{{ $category->name }}</option>
+                  <option value="{{ $category->id }}">{{ $category->name }}</option>
               @endforeach
           </select> 
         </div>

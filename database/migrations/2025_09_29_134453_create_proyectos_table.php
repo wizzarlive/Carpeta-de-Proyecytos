@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->binary('thumbnail')->nullable();
+            $table->longText('thumbnail')->charset('binary')->nullable();;
             $table->string('route_proyect');
             $table->string('route_github');
             $table->string('route_pdf');
