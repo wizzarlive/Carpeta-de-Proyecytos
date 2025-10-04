@@ -13,7 +13,7 @@
     <div class="crud-container">
 
         <!-- Botón Volver -->
-        <a href="proyectos" class="btn btn-primary volver">Volver</a>
+        <a href="/proyectos" class="btn btn-primary volver">Volver</a>
 
         <!-- Formulario -->
         <div class="form-section">
