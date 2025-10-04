@@ -73,3 +73,30 @@ input {
 .btn-primary:hover {
   background-color: #0E7490;
 }
+
+
+ul.categories-wrapper{
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  margin-top: 2rem;
+
+  li{
+    padding: 1rem;
+    border-radius: 8px;
+    background: #374151;
+    border: 1px solid #4B5563;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    i{
+      margin-left: 1rem;
+      color: #06B6D4;
+      cursor: pointer;
+    }
+  }
+}

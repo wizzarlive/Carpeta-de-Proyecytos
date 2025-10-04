@@ -30,6 +30,12 @@ class CategoriaController extends Controller
         return redirect()->route("categorias.index")->with("success","Categoria creada");
     }
 
+    public function edit(string $id)
+    {
+        $category = Categoria::findOrFail($id);
+        return view('edit_etiqueta', compact('category'));
+    }
+
 
     /**
      * Update the specified resource in storage.

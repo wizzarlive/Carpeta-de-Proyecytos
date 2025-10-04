@@ -47,6 +47,9 @@ Route::middleware(['auth'])->delete('/proyectos/{id}', [ProyectoController::clas
 // Página de CRUD categorias "etiquetas" (protegida)
 Route::middleware(['auth'])->get('/create_etiqueta', [CategoriaController::class,'index'])->name('categorias.index');
 Route::middleware(['auth'])->post('/create_etiqueta', [CategoriaController::class,'store'])->name('categorias.store');
+Route::middleware(['auth'])->get('/categorias/edit/{id}', [CategoriaController::class,'edit'])->name('categorias.edit');
+Route::middleware(['auth'])->put('/categorias/{id}', [CategoriaController::class,'update'])->name('categorias.update');
+Route::middleware(['auth'])->delete('/categorias/{id}', [CategoriaController::class,'destroy'])->name('categorias.destroy');
 
 
 // Página de formulario de agregar proyectos (protegida)
